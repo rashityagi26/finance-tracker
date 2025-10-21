@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { transactionAPI } from '../services/api';
 
@@ -10,7 +10,11 @@ const DeleteTransaction = () => {
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchTransaction = useCallback(async () => {
+  useEffect(() => {
+    fetchTransaction();
+  }, []);
+
+  const fetchTransaction = async () => {
     try {
       setFetching(true);
       setError(null);
@@ -22,15 +26,10 @@ const DeleteTransaction = () => {
     } finally {
       setFetching(false);
     }
-  }, [id]); // ✅ depend only on id
-
+  };
   useEffect(() => {
     fetchTransaction();
   }, [fetchTransaction]);
-  
-  // ...rest of your component unchanged
-};
-
 
   const handleDelete = async () => {
     try {
