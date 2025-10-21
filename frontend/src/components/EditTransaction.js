@@ -17,7 +17,7 @@ const EditTransaction = () => {
 
   useEffect(() => {
     fetchTransaction();
-  }, [id]);
+  }, [fetchTransaction]);
 
   const fetchTransaction = async () => {
     try {

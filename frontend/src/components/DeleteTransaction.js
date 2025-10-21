@@ -12,7 +12,7 @@ const DeleteTransaction = () => {
 
   useEffect(() => {
     fetchTransaction();
-  }, [id]);
+  }, [fetchTransaction]);
 
   const fetchTransaction = async () => {
     try {
