@@ -15,9 +15,7 @@ const EditTransaction = () => {
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchTransaction();
-  }, [fetchTransaction]);
+  
 
   const fetchTransaction = async () => {
     try {
@@ -39,6 +37,10 @@ const EditTransaction = () => {
       setFetching(false);
     }
   };
+
+  useEffect(() => {
+    fetchTransaction();
+  }, [fetchTransaction]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

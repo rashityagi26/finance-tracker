@@ -10,9 +10,7 @@ const DeleteTransaction = () => {
   const [fetching, setFetching] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchTransaction();
-  }, [fetchTransaction]);
+
 
   const fetchTransaction = async () => {
     try {
@@ -27,6 +25,9 @@ const DeleteTransaction = () => {
       setFetching(false);
     }
   };
+  useEffect(() => {
+    fetchTransaction();
+  }, [fetchTransaction]);
 
   const handleDelete = async () => {
     try {
