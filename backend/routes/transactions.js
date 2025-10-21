@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const { protect } = require('../middleware/auth');
 
 // Use in-memory storage if MongoDB is not connected
 let Transaction;
@@ -17,8 +18,8 @@ try {
 
 // @route   GET /api/transactions
 // @desc    Get all transactions
-// @access  Public
-router.get('/', async (req, res) => {
+// @access  Private
+router.get('/', protect, async (req, res) => {
   try {
     const transactions = await Transaction.find().sort({ date: -1 });
     res.json(transactions);
@@ -30,8 +31,8 @@ router.get('/', async (req, res) => {
 
 // @route   GET /api/transactions/:id
 // @desc    Get single transaction
-// @access  Public
-router.get('/:id', async (req, res) => {
+// @access  Private
+router.get('/:id', protect, async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);
     
@@ -48,8 +49,8 @@ router.get('/:id', async (req, res) => {
 
 // @route   POST /api/transactions
 // @desc    Create new transaction
-// @access  Public
-router.post('/', async (req, res) => {
+// @access  Private
+router.post('/', protect, async (req, res) => {
   try {
     const { title, amount, date, category } = req.body;
     
@@ -74,8 +75,8 @@ router.post('/', async (req, res) => {
 
 // @route   PUT /api/transactions/:id
 // @desc    Update transaction
-// @access  Public
-router.put('/:id', async (req, res) => {
+// @access  Private
+router.put('/:id', protect, async (req, res) => {
   try {
     const { title, amount, date, category } = req.body;
     
@@ -104,8 +105,8 @@ router.put('/:id', async (req, res) => {
 
 // @route   DELETE /api/transactions/:id
 // @desc    Delete transaction
-// @access  Public
-router.delete('/:id', async (req, res) => {
+// @access  Private
+router.delete('/:id', protect, async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id);
     

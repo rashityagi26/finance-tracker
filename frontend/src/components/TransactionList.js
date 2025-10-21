@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { transactionAPI } from '../services/api';
+import Header from './Header';
 
 const TransactionList = () => {
   const location = useLocation();
@@ -45,9 +46,9 @@ const TransactionList = () => {
   };
 
   const formatAmount = (amount) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(amount);
   };
 
@@ -77,10 +78,25 @@ const TransactionList = () => {
 
   return (
     <div>
-      <div className="navigation">
-        <Link to="/" className="active">All Transactions</Link>
-        <Link to="/add">Add Transaction</Link>
-      </div>
+      <Header 
+        title="💰 Your Financial Dashboard" 
+        subtitle="Track, manage, and optimize your money flow" 
+      />
+      
+      <div className="container">
+        <div className="navigation">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <Link to="/" className="active">📊 All Transactions</Link>
+              <Link to="/add">➕ Add Transaction</Link>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <span style={{ color: '#667eea', fontWeight: '600' }}>
+                💰 Total Balance: {formatAmount(calculateTotal())}
+              </span>
+            </div>
+          </div>
+        </div>
 
       {successMessage && (
         <div className="success">
@@ -141,6 +157,7 @@ const TransactionList = () => {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

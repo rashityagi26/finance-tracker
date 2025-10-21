@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { transactionAPI } from '../services/api';
+import Header from './Header';
 
 const AddTransaction = () => {
   const navigate = useNavigate();
@@ -63,10 +64,16 @@ const AddTransaction = () => {
 
   return (
     <div>
-      <div className="navigation">
-        <Link to="/">All Transactions</Link>
-        <Link to="/add" className="active">Add Transaction</Link>
-      </div>
+      <Header 
+        title="➕ Add New Transaction" 
+        subtitle="Record your income or expense quickly and easily" 
+      />
+      
+      <div className="container">
+        <div className="navigation">
+          <Link to="/">📊 All Transactions</Link>
+          <Link to="/add" className="active">➕ Add Transaction</Link>
+        </div>
 
       <div className="card">
         <h2>Add New Transaction</h2>
@@ -107,7 +114,7 @@ const AddTransaction = () => {
                 required
               />
               <small style={{ color: '#666', fontSize: '0.8rem' }}>
-                Use positive for income, negative for expenses
+                Use positive for income, negative for expenses (amount in ₹)
               </small>
             </div>
 
@@ -155,7 +162,7 @@ const AddTransaction = () => {
               className="btn btn-success"
               disabled={loading}
             >
-              {loading ? 'Adding...' : 'Add Transaction'}
+              {loading ? 'Adding...' : '💾 Save Transaction'}
             </button>
             <button
               type="button"
@@ -167,6 +174,7 @@ const AddTransaction = () => {
             </button>
           </div>
         </form>
+      </div>
       </div>
     </div>
   );

@@ -143,7 +143,7 @@ const EditTransaction = () => {
                 required
               />
               <small style={{ color: '#666', fontSize: '0.8rem' }}>
-                Use positive for income, negative for expenses
+                Use positive for income, negative for expenses (amount in ₹)
               </small>
             </div>
 
