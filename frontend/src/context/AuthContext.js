@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
@@ -58,9 +58,9 @@ export const AuthProvider = ({ children }) => {
   // Set axios default header with token
   const setAuthToken = (token) => {
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
-      delete axios.defaults.headers.common['Authorization'];
+      delete api.defaults.headers.common['Authorization'];
     }
   };
 
@@ -79,15 +79,11 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Login user
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     dispatch({ type: 'LOGIN_START' });
     
     try {
-      const response = await axios.post('/api/auth/login', { email, password }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await api.post('/auth/login', { email, password });
       const { token, ...userData } = response.data;
       
       // Store token and user data in localStorage
@@ -111,18 +107,14 @@ export const AuthProvider = ({ children }) => {
       });
       return { success: false, error: message };
     }
-  };
+  }, []);
 
   // Register user
-  const register = async (name, email, password) => {
+  const register = useCallback(async (name, email, password) => {
     dispatch({ type: 'LOGIN_START' });
     
     try {
-      const response = await axios.post('/api/auth/register', { name, email, password }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await api.post('/auth/register', { name, email, password });
       const { token, ...userData } = response.data;
       
       // Store token and user data in localStorage
@@ -146,28 +138,28 @@ export const AuthProvider = ({ children }) => {
       });
       return { success: false, error: message };
     }
-  };
+  }, []);
 
   // Logout user
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setAuthToken(null);
     dispatch({ type: 'LOGOUT' });
-  };
+  }, []);
 
   // Clear error
-  const clearError = () => {
+  const clearError = useCallback(() => {
     dispatch({ type: 'CLEAR_ERROR' });
-  };
+  }, []);
 
-  const value = {
+  const value = useMemo(() => ({
     ...state,
     login,
     register,
     logout,
     clearError,
-  };
+  }), [state, login, register, logout, clearError]);
 
   return (
     <AuthContext.Provider value={value}>

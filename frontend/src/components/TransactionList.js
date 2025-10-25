@@ -1,29 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { transactionAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import Header from './Header';
 
 const TransactionList = () => {
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  useEffect(() => {
-    fetchTransactions();
-    
-    // Check for success message from navigation state
-    if (location.state?.message) {
-      setSuccessMessage(location.state.message);
-      // Clear the message after 3 seconds
-      setTimeout(() => setSuccessMessage(null), 3000);
-      // Clear the location state to prevent message from showing again on refresh
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state]);
-
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -35,7 +24,22 @@ const TransactionList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchTransactions();
+    }
+    
+    // Check for success message from navigation state
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the message after 3 seconds
+      setTimeout(() => setSuccessMessage(null), 3000);
+      // Clear the location state to prevent message from showing again on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, fetchTransactions, isAuthenticated]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
